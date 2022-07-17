@@ -1,14 +1,31 @@
-# ToDoListApp
-Simple app for managing a to-do list using the FastAPI and SQLModel frameworks
+# To-do list administration app
+Simple app for managing a to-do list using the FastAPI and SQLModel frameworks.
 
 # Getting Started
 
 1. Clone the repository to your environment: `git clone https://github.com/paparon96/ToDoListApp.git`
-2. Create a virtual environment for the project: `python -m venv to_do_list_app_venv`
-3. Install the required packages (with the tested versions): `pip install -r ./requirements.txt`
-4. Run the API in your environment: `uvicorn app.main:app`
+2. Create a virtual environment for the project: `python -m venv to_do_list_app_venv` (Python 3.6+ version is required for FastAPI)
+3. Activate virtual environment: `source ./to_do_list_app_venv/bin/activate`
+4. Install the required packages (with the tested versions): `pip install -r ./requirements.txt`
+5. Run the API in your environment: `uvicorn app.main:app`
 
-# API structure
+# Data models
+The to-do list items have the following attributes:
+* `id`: `int`, ID of the item (set automatically, not customizable by the user)
+* `description`: `str`, Short description of the item
+* `priority`: `int`, Item priority (higher value for more important task)
+* `owner`: `str`, The person assigned to work on the item
+* `deadline`: `date`, Deadline date for the item
+* `progress`: `str`, Current progress on the item
+* `team_id`: `int`, ID of the team to which the item is assigned
+* `team`: `Team`, Attributes of the team to which the item is assigned (only shown when info for a specific item is queried due to display/transparency reasons)
+
+There is also `Team` data model, since teams are linked to the items through the `team_id` attribute. The teams have the following attributes:
+* `id`: `int`, ID of the team (set automatically, not customizable by the user)
+* `name`: `str`, Name of the team
+* `headquarters`: `str`, Location of the team headquarters
+* `items`: `List[ToDoListItem]`, Items which are assigned to the team (only shown when info for a specific team is queried due to display/transparency reasons)
+
 
 # Usage examples
 
@@ -27,7 +44,7 @@ print(response.json())
 ```
 import requests
 
-item_id = 3
+item_id = 1
 response = requests.get(f'http://127.0.0.1:8000/items/{item_id}')
 print(response)
 print(response.json())
@@ -39,7 +56,7 @@ import requests
 
 new_todo_item = {
             "description": "Test task",
-            "priority": 3,
+            "priority": 2,
             "owner": "Test user",
             "deadline": "2022-07-20",
             "progress": "Backlog",
@@ -55,7 +72,7 @@ print(response.text)
 ```
 import requests
 
-date = '2022-07-16'
+date = '2022-07-19'
 response = requests.get(f'http://127.0.0.1:8000/items/urgent/?date={date}')
 print(response)
 print(response.json())

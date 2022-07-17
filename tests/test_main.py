@@ -41,3 +41,17 @@ def test_create_item(client: TestClient):
     assert data["priority"] is None
     assert data["team_id"] is None
     assert data["id"] is not None
+
+def test_update_item(client: TestClient):
+    _ = client.post(
+        "/items/", json={"description": "test item", "owner": "test user",
+        "deadline": "2022-07-20", "progress": "In progress"}
+    )
+    response = client.patch(
+        "/items/1", json={"description": "updated test item"}
+    )
+    data = response.json()
+
+    assert response.status_code == 200
+    assert data["description"] == "updated test item"
+    assert data["owner"] == "test user"
